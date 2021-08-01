@@ -18,7 +18,7 @@ public class Song {
     private String fileMp3;
     private String imgUrl;
     private int listenCount;
-    private int like;
+    private int likes;
     @ManyToOne
     private  User user;
     @ManyToMany(fetch = FetchType.EAGER)
