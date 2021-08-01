@@ -18,7 +18,6 @@ public class User {
     @Size(max=12)
     @Column(unique=true)
     private String username;
-//    @Length(min = 6, max = 8)
     @NotEmpty
     private String password;
     @NotEmpty
@@ -28,7 +27,6 @@ public class User {
     private String address;
     private String email;
     private String avatarUrl;
-    //De fetch mac dinh Lazy thi se ko load duoc cac roles ra
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 }
