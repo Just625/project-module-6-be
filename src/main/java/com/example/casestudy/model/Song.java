@@ -3,6 +3,7 @@ package com.example.casestudy.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,13 +19,14 @@ public class Song {
     private String fileMp3;
     private String imgUrl;
     private int listenCount;
-    private int like;
+    private int likes;
+    private String album;
     @ManyToOne
     private  User user;
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Genre> genres;
+    private Set<Genre> genres = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Singer> singers;
+    private Set<Singer> singers = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList;
 }
