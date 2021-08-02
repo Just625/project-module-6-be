@@ -20,8 +20,9 @@ public class Singer {
     private String biography;
     private String band;
     private String popularSong;
-    private int like;
+    private int likes;
     private String additionalInfo;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList;
+    private String imageUrl;
 }

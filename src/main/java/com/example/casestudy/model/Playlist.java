@@ -1,8 +1,10 @@
 package com.example.casestudy.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -14,10 +16,10 @@ public class Playlist {
     private Long id;
     private String name;
     private String description;
-    private String createdAt;
+    private Date createdAt;
     @ManyToOne
     private User user;
-    private String lastUpdated;
+    private Date lastUpdated;
     private int listenCount;
     private int like;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -26,4 +28,7 @@ public class Playlist {
     private Set<Song> songs;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList;
+
+    public Playlist (){
+    }
 }
