@@ -46,6 +46,8 @@ public class SongController {
         Optional<Singer> singer = singerService.findById(songDTO.getSingers());
         song.getGenres().add(genre.get());
         song.getSingers().add(singer.get());
+        song.setListenCount(0);
+        song.setLikes(0);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
 }
