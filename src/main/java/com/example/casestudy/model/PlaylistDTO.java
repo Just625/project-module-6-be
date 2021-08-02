@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+
 import java.util.Set;
 @Data
 @NoArgsConstructor
@@ -14,4 +14,6 @@ public class PlaylistDTO {
     private String description;
     private Set<Genre> genres;
     private User user;
+    private String imgUrl;
+
 }

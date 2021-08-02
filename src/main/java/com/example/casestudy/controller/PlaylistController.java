@@ -2,6 +2,7 @@ package com.example.casestudy.controller;
 
 import com.example.casestudy.model.Playlist;
 import com.example.casestudy.model.PlaylistDTO;
+import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.playlist.IPlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class PlaylistController {
     @Autowired
     private IPlaylistService playlistService;
+    @Autowired
+    private IGenreService genreService;
     @PostMapping
     public ResponseEntity<Playlist> save(@RequestBody PlaylistDTO playlistDTO){
         Playlist playlist = new Playlist();
