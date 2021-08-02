@@ -57,4 +57,22 @@ public class SongController {
         song.setCommentList(commentList);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
+
+    @GetMapping("song/userId/{id}")
+    public ResponseEntity<Iterable<Song>> getAllSongByUserId(@PathVariable Long id){
+        List<Song> songs = (List<Song>) this.songService.findSongByUserId(id);
+        if (!songs.isEmpty()){
+            return new ResponseEntity<>(songs, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("song/search/{keyword}/{id}")
+    public ResponseEntity<Iterable<Song>> getSongByNameOrAuthor(@PathVariable String keyword, @PathVariable Long id){
+        List<Song> songs = (List<Song>) this.songService.findSongByNameOrAuthor(keyword, id);
+        if (!songs.isEmpty()){
+            return new ResponseEntity<>(songs, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
