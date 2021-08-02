@@ -56,6 +56,6 @@ public class AuthController {
             user.setRoles(roles);
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }
