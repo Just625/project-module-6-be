@@ -49,13 +49,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> createAccount(@Valid @RequestBody User user, BindingResult bindingResult){
-        if(bindingResult.hasFieldErrors()){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    public ResponseEntity<User> createAccount(@Valid @RequestBody User user, BindingResult bindingResult) {
+        if (!bindingResult.hasFieldErrors() && user.getPassword().length() >= 6 && user.getPassword().length() <= 8) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role(2L, "ROLE_USER"));
+            user.setRoles(roles);
+            return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
         }
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role(2L, "ROLE_USER"));
-        user.setRoles(roles);
-        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }
