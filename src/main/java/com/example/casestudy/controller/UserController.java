@@ -26,9 +26,9 @@ public class UserController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
         Optional<User> userOptional = userService.findById(id);
-        if(!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User currentUser = userOptional.get();
@@ -37,6 +37,17 @@ public class UserController {
         currentUser.setEmail(user.getEmail());
         currentUser.setPhoneNumber(user.getPhoneNumber());
         currentUser.setAvatarUrl(user.getAvatarUrl());
-        return new ResponseEntity<>(userService.save(currentUser),HttpStatus.OK);
+        return new ResponseEntity<>(userService.save(currentUser), HttpStatus.OK);
+    }
+
+    @PutMapping("/changePass/{id}")
+    public ResponseEntity<User> changePass(@PathVariable Long id, @RequestBody User user) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user1 = userOptional.get();
+        user.setPassword(user.getPassword());
+        return new ResponseEntity<>(userService.save(user1), HttpStatus.OK);
     }
 }

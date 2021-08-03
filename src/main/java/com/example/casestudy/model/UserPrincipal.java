@@ -42,6 +42,7 @@ public class UserPrincipal implements UserDetails {
                 authorities
         );
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles;
