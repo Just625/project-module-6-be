@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class Playlist {
     private int likes;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Song> songs;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList;

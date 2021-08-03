@@ -12,7 +12,7 @@ import java.util.Set;
 public class PlaylistDTO {
     private String name;
     private String description;
-    private Set<Genre> genres;
+    private Genre genres;
     private User user;
     private String imgUrl;
 
