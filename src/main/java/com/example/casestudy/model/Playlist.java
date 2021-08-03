@@ -19,7 +19,7 @@ public class Playlist {
     private User user;
     private String lastUpdated;
     private int listenCount;
-    private int like;
+    private int likes;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres;
     @ManyToMany(fetch = FetchType.EAGER)

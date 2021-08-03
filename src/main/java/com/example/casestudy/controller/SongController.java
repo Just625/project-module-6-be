@@ -75,4 +75,15 @@ public class SongController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @DeleteMapping("song/{userId}/{songId}")
+    public ResponseEntity<?> deleteSongByUserIdAndSongId (@PathVariable Long userId, @PathVariable Long songId){
+        try{
+            this.songService.deleteSongByIdAndUserId(userId, songId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
