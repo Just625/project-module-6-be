@@ -1,0 +1,42 @@
+package com.example.casestudy.controller;
+
+import com.example.casestudy.model.User;
+import com.example.casestudy.service.user.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/users")
+public class UserController {
+    @Autowired
+    private IUserService userService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user){
+        Optional<User> userOptional = userService.findById(id);
+        if(!userOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User currentUser = userOptional.get();
+        currentUser.setName(user.getName());
+        currentUser.setAddress(user.getAddress());
+        currentUser.setEmail(user.getEmail());
+        currentUser.setPhoneNumber(user.getPhoneNumber());
+        currentUser.setAvatarUrl(user.getAvatarUrl());
+        return new ResponseEntity<>(userService.save(currentUser),HttpStatus.OK);
+    }
+}

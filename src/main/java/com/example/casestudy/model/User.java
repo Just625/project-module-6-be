@@ -25,6 +25,7 @@ public class User {
     private String phoneNumber;
     private String name;
     private String address;
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String email;
     private String avatarUrl;
     @ManyToMany(fetch = FetchType.EAGER)
