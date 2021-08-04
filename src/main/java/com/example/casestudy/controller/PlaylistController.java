@@ -66,4 +66,14 @@ public class PlaylistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchPlaylist(@RequestBody PlaylistDTO playlistDTO){
+        return new ResponseEntity<>(playlistService.findPlaylistByNameContainsAndUserContainsAndGenresContains(
+                playlistDTO.getName(),playlistDTO.getUser().getId(),playlistDTO.getGenres().getId()),HttpStatus.OK);
+    }
+    @GetMapping("/searchByName/{name}")
+    public ResponseEntity<?> searchPlayListByName(@PathVariable String name){
+        return new ResponseEntity<>(playlistService.findPlaylistByNameContains(name), HttpStatus.OK);
+    }
+
 }
