@@ -66,4 +66,19 @@ public class PlaylistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editPlayListInfo(@PathVariable Long id,@RequestBody PlaylistDTO playlistDTO){
+        Optional<Playlist> playlistOptional = playlistService.findById(id);
+        if(playlistOptional.isPresent()){
+            Playlist playlist = playlistOptional.get();
+            playlist.setName(playlistDTO.getName());
+            playlist.setDescription(playlistDTO.getDescription());
+            Set<Genre> genres = new HashSet<>();
+            genres.add(playlistDTO.getGenres());
+            playlist.setGenres(genres);
+            playlist.setImgUrl(playlistDTO.getImgUrl());
+            return new ResponseEntity<>(playlistService.save(playlist),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
