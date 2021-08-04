@@ -1,8 +1,11 @@
 package com.example.casestudy.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,16 +17,22 @@ public class Playlist {
     private Long id;
     private String name;
     private String description;
-    private String createdAt;
+    @Column(columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+    private Date createdAt;
     @ManyToOne
     private User user;
-    private String lastUpdated;
+    private Date lastUpdated;
     private int listenCount;
     private int likes;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Song> songs;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Comment> commentList;
+    private String imgUrl;
+
+    public Playlist (){
+        this.createdAt = new Date();
+    }
 }
