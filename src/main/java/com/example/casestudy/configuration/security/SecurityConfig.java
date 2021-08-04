@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             Set<Role> roles = new HashSet<>();
             roles.add(new Role(1L, "ROLE_ADMIN"));
             admin.setUsername("admin");
-            admin.setPassword("123456");
+            admin.setPassword(passwordEncoder.encode("123456"));
             admin.setRoles(roles);
             admin.setPhoneNumber("0981234567");
             admin.setAvatarUrl("https://firebasestorage.googleapis.com/v0/b/geekmusic-1834d.appspot.com/o/default_avatar?alt=media&token=d8c2b373-9dfd-4fcd-943d-a2611774b892");
