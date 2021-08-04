@@ -1,11 +1,9 @@
 package com.example.casestudy.controller;
 
-import com.example.casestudy.model.Genre;
-import com.example.casestudy.model.Playlist;
-import com.example.casestudy.model.PlaylistDTO;
-import com.example.casestudy.model.User;
+import com.example.casestudy.model.*;
 import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.playlist.IPlaylistService;
+import com.example.casestudy.service.song.ISongService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,8 @@ public class PlaylistController {
     private IGenreService genreService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ISongService songService;
 
     @PostMapping
     public ResponseEntity<Playlist> save(@RequestBody PlaylistDTO playlistDTO) {
@@ -78,6 +78,18 @@ public class PlaylistController {
             playlist.setGenres(genres);
             playlist.setImgUrl(playlistDTO.getImgUrl());
             return new ResponseEntity<>(playlistService.save(playlist),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    @PutMapping("/{id}/song")
+    public ResponseEntity<?> addSongToPlaylist(@PathVariable Long id,@RequestBody Song song){
+        Optional<Playlist> playlistOptional = playlistService.findById(id);
+        Optional<Song> songOptional = songService.findById(song.getId());
+        if(playlistOptional.isPresent()&&songOptional.isPresent()){
+            Set<Song> songs = playlistOptional.get().getSongs();
+            songs.add(songOptional.get());
+            playlistOptional.get().setSongs(songs);
+            return new ResponseEntity<>(playlistService.save(playlistOptional.get()),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
