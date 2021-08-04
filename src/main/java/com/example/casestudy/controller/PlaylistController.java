@@ -48,32 +48,39 @@ public class PlaylistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}")
-    public  ResponseEntity<?> findPlaylistById(@PathVariable Long id){
+    public ResponseEntity<?> findPlaylistById(@PathVariable Long id) {
         Optional<Playlist> playlistOptional = playlistService.findById(id);
-        if(playlistOptional.isPresent()){
-            return new ResponseEntity<>(playlistOptional.get(),HttpStatus.OK);
+        if (playlistOptional.isPresent()) {
+            return new ResponseEntity<>(playlistOptional.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePlaylist(@PathVariable Long id){
+    public ResponseEntity<?> deletePlaylist(@PathVariable Long id) {
         Optional<Playlist> playlistOptional = playlistService.findById(id);
-        if(playlistOptional.isPresent()){
+        if (playlistOptional.isPresent()) {
             playlistService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/search")
-    public ResponseEntity<?> searchPlaylist(@RequestBody PlaylistDTO playlistDTO){
+    public ResponseEntity<?> searchPlaylist(@RequestBody PlaylistDTO playlistDTO) {
         return new ResponseEntity<>(playlistService.findPlaylistByNameContainsAndUserContainsAndGenresContains(
-                playlistDTO.getName(),playlistDTO.getUser().getId(),playlistDTO.getGenres().getId()),HttpStatus.OK);
+                playlistDTO.getName(), playlistDTO.getUser().getId(), playlistDTO.getGenres().getId()), HttpStatus.OK);
     }
+
     @GetMapping("/searchByName/{name}")
-    public ResponseEntity<?> searchPlayListByName(@PathVariable String name){
+    public ResponseEntity<?> searchPlayListByName(@PathVariable String name) {
         return new ResponseEntity<>(playlistService.findPlaylistByNameContains(name), HttpStatus.OK);
     }
 
+    @GetMapping("/searchByUsername/{userName}/{listName}")
+    public ResponseEntity<?> searchPlaylistByUserName(@PathVariable String userName, @PathVariable String listName) {
+        return new ResponseEntity<>(playlistService.findByGenre_Name(userName, listName), HttpStatus.OK);
+    }
 }

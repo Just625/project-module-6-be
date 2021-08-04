@@ -48,4 +48,10 @@ public class PlayListService implements IPlaylistService {
         return playlistRepository.findPlaylistByNameContains(name);
     }
 
+    @Override
+    public Iterable<Playlist> findByGenre_Name(String name, String listName) {
+        return playlistRepository.findByGenres_NameAndNameContains(name, listName);
+    }
+
+
 }
