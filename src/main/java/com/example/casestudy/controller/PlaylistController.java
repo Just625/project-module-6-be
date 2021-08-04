@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -77,6 +78,7 @@ public class PlaylistController {
             genres.add(playlistDTO.getGenres());
             playlist.setGenres(genres);
             playlist.setImgUrl(playlistDTO.getImgUrl());
+            playlist.setLastUpdated(new Date());
             return new ResponseEntity<>(playlistService.save(playlist),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,6 +91,7 @@ public class PlaylistController {
             Set<Song> songs = playlistOptional.get().getSongs();
             songs.add(songOptional.get());
             playlistOptional.get().setSongs(songs);
+            playlistOptional.get().setLastUpdated(new Date());
             return new ResponseEntity<>(playlistService.save(playlistOptional.get()),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

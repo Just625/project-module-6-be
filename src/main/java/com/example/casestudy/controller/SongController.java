@@ -50,4 +50,12 @@ public class SongController {
         song.setLikes(0);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
+    @GetMapping("song/new")
+    public ResponseEntity<?> getSongOderByCrateAt(){
+        return new ResponseEntity<>(songService.findAllOrderByCreateAt(),HttpStatus.OK);
+    }
+    @GetMapping("song/count")
+    public ResponseEntity<?> getSongOderByListenCount(){
+        return new ResponseEntity<>(songService.findAllOrderByCreateAt(),HttpStatus.OK);
+    }
 }
