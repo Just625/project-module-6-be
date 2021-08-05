@@ -8,6 +8,8 @@ import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -29,7 +31,10 @@ public class PlaylistController {
     private ISongService songService;
 
     @PostMapping
-    public ResponseEntity<Playlist> save(@RequestBody PlaylistDTO playlistDTO) {
+    public ResponseEntity<Playlist> save(@Validated @RequestBody PlaylistDTO playlistDTO, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Playlist playlist = new Playlist();
         playlist.setName(playlistDTO.getName());
         playlist.setDescription(playlistDTO.getDescription());
@@ -68,7 +73,10 @@ public class PlaylistController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> editPlayListInfo(@PathVariable Long id,@RequestBody PlaylistDTO playlistDTO){
+    public ResponseEntity<?> editPlayListInfo(@PathVariable Long id,@Validated @RequestBody PlaylistDTO playlistDTO, BindingResult bindingResult){
+        if (bindingResult.hasFieldErrors()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Optional<Playlist> playlistOptional = playlistService.findById(id);
         if(playlistOptional.isPresent()){
             Playlist playlist = playlistOptional.get();

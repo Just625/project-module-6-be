@@ -39,4 +39,19 @@ public class SongService implements ISongService{
         return songRepository.findAllOrderByCreatedAt(pageable);
     }
 
+
+    @Override
+    public Iterable<Song> findSongByUserId(Long userId) {
+        return songRepository.findSongByUserId(userId);
+    }
+
+    @Override
+    public Iterable<Song> findSongByNameOrAuthor(String keyword, Long id) {
+        return songRepository.findSongByNameOrAuthor(keyword, id);
+    }
+
+    @Override
+    public void deleteSongByIdAndUserId(Long userId, Long songId) {
+        songRepository.deleteSongByIdAndUserId(userId, songId);
+    }
 }
