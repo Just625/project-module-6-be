@@ -40,29 +40,10 @@ public class PlayListService implements IPlaylistService {
             return playlistRepository.findPlaylistByUserId(id);
     }
 
-    @Override
-    public Iterable<Playlist> findPlaylistByNameContainsAndUserContainsAndGenresContains(String name, Long id, Long id2) {
-        return playlistRepository.findPlaylistByNameContainsAndUserContainsAndGenresContains(name, id, id2);
-    }
 
     @Override
     public Iterable<Playlist> findPlaylistByNameContains(String name) {
         return playlistRepository.findPlaylistByNameContains(name);
-    }
-
-    @Override
-    public Iterable<Playlist> findByGenre_Name(String name, String listName) {
-        return playlistRepository.findByGenres_NameAndNameContains(name, listName);
-    }
-
-    @Override
-    public Iterable<Playlist> findPlaylistByCreatedAtBetween(Date startDate, Date endDate) {
-        return this.playlistRepository.findPlaylistByCreatedAtBetween(startDate,endDate);
-    }
-
-    @Override
-    public Iterable<Playlist> findByGenres_NameAndNameContainsAndCreatedAtBetween(String name, String listName, Date startDate, Date endDate) {
-        return this.playlistRepository.findByGenres_NameAndNameContainsAndCreatedAtBetween(name, listName, startDate, endDate);
     }
 
     @Override
