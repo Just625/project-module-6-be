@@ -3,6 +3,8 @@ package com.example.casestudy.service.song;
 import com.example.casestudy.model.Song;
 import com.example.casestudy.repository.ISongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,12 +35,8 @@ public class SongService implements ISongService{
     }
 
     @Override
-    public Iterable<Song> findAllOrderByCreateAt() {
-        return songRepository.findAllOrderByCreatedAt();
+    public Page<Song> findAllOrderByCreatedAt(Pageable pageable) {
+        return songRepository.findAllOrderByCreatedAt(pageable);
     }
 
-    @Override
-    public Iterable<Song> findAllOrderByListenCount() {
-        return songRepository.findAllOrderByListenCount();
-    }
 }

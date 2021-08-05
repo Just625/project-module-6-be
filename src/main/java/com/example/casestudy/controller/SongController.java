@@ -8,6 +8,8 @@ import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.singer.ISingerService;
 import com.example.casestudy.service.song.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,11 +53,8 @@ public class SongController {
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
     @GetMapping("song/new")
-    public ResponseEntity<?> getSongOderByCrateAt(){
-        return new ResponseEntity<>(songService.findAllOrderByCreateAt(),HttpStatus.OK);
+    public ResponseEntity<?> getSongOderByCrateAt(@RequestParam int offset,@RequestParam int limit){
+        return new ResponseEntity<>(songService.findAllOrderByCreatedAt(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
     }
-    @GetMapping("song/count")
-    public ResponseEntity<?> getSongOderByListenCount(){
-        return new ResponseEntity<>(songService.findAllOrderByCreateAt(),HttpStatus.OK);
-    }
+
 }
