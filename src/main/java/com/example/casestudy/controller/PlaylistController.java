@@ -10,8 +10,13 @@ import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -82,5 +87,33 @@ public class PlaylistController {
     @GetMapping("/searchByUsername/{userName}/{listName}")
     public ResponseEntity<?> searchPlaylistByUserName(@PathVariable String userName, @PathVariable String listName) {
         return new ResponseEntity<>(playlistService.findByGenre_Name(userName, listName), HttpStatus.OK);
+    }
+
+    @GetMapping("/searchByDate/{startDate}/{endDate}")
+    public ResponseEntity<Iterable<Playlist>> searchPlaylistDate(@PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MMM-yyyy");
+        Date a = formatter2.parse(startDate);
+        Date b = formatter2.parse(endDate);
+        return new ResponseEntity<>(playlistService.findPlaylistByCreatedAtBetween(a, b), HttpStatus.OK);
+    }
+
+    @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}")
+    public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MMM-yyyy");
+        Date a = formatter2.parse(startDate);
+        Date b = formatter2.parse(endDate);
+        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetween(genre, name, a, b), HttpStatus.OK);
+    }
+    @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}/{userId}")
+    public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate, @PathVariable Long userId) throws ParseException {
+        Optional<User> userOptional = userService.findById(userId);
+        if(!userOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+        SimpleDateFormat formatter2 = new SimpleDateFormat("dd-MMM-yyyy");
+        Date a = formatter2.parse(startDate);
+        Date b = formatter2.parse(endDate);
+        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b,user ), HttpStatus.OK);
     }
 }

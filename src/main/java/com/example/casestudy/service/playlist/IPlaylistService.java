@@ -4,10 +4,16 @@ import com.example.casestudy.model.Playlist;
 import com.example.casestudy.model.User;
 import com.example.casestudy.service.IGeneralService;
 
+import java.util.Date;
+
 public interface IPlaylistService extends IGeneralService<Playlist> {
     Iterable<Playlist> getPlaylistByUserId(Long id);
     Iterable<Playlist> findPlaylistByNameContainsAndUserContainsAndGenresContains(String name, Long id, Long id2);
     Iterable<Playlist> findPlaylistByNameContains(String name);
     Iterable<Playlist> findByGenre_Name(String name, String listName);
 //Iterable<Playlist> findByGenres_NameAndNameContains(String name, String listName);
+Iterable<Playlist> findPlaylistByCreatedAtBetween(Date startDate, Date endDate);
+Iterable<Playlist> findByGenres_NameAndNameContainsAndCreatedAtBetween(String name, String listName, Date startDate, Date endDate);
+Iterable<Playlist> findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(String name, String listName, Date startDate, Date endDate, User user);
+
 }
