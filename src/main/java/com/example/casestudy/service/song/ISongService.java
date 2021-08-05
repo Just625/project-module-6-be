@@ -13,6 +13,7 @@ public interface ISongService extends IGeneralService<Song> {
     void deleteSongByIdAndUserId(Long userId, Long songId);
     Iterable<Song> findSongByNameContains(String name);
     Iterable<Song> findByNameContainsAndAuthorContainsAndSingers_IdAndUser(String songName, String authorName, Long singerId, User user);
+    Iterable<Song> getTopSong();
 
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
 

@@ -158,4 +158,9 @@ public class SongController {
         }
         return new ResponseEntity<>(songService.findByNameContainsAndAuthorContainsAndSingers_IdAndUser(songName, authorName, singerId, userOptional.get()), HttpStatus.OK);
     }
+
+    @GetMapping("toplisten")
+    public ResponseEntity<Iterable<Song>> getTopSong(){
+        return new ResponseEntity<>(this.songService.getTopSong(), HttpStatus.OK);
+    }
 }

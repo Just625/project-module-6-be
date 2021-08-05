@@ -24,9 +24,12 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     @Modifying
     @Query("delete from Song s where s.user.id =?1 and s.id = ?2")
     void deleteSongByIdAndUserId(Long userId, Long songId);
-    @Query(value = "select * from Song order by created_at desc ",nativeQuery = true)
+
+    @Query(value = "select * from Song order by created_at desc ", nativeQuery = true)
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
 
+    @Query(value = "select * from song order by listen_count desc limit 10 ", nativeQuery = true)
+    Iterable<Song> getTopSong();
 
     Iterable<Song> findSongByNameContains(String name);
 
