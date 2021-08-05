@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,8 @@ public class AuthController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
@@ -54,6 +57,7 @@ public class AuthController {
             Set<Role> roles = new HashSet<>();
             roles.add(new Role(2L, "ROLE_USER"));
             user.setRoles(roles);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

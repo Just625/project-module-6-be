@@ -12,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -54,19 +56,20 @@ public class PlaylistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}")
-    public  ResponseEntity<?> findPlaylistById(@PathVariable Long id){
+    public ResponseEntity<?> findPlaylistById(@PathVariable Long id) {
         Optional<Playlist> playlistOptional = playlistService.findById(id);
-        if(playlistOptional.isPresent()){
-            return new ResponseEntity<>(playlistOptional.get(),HttpStatus.OK);
+        if (playlistOptional.isPresent()) {
+            return new ResponseEntity<>(playlistOptional.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePlaylist(@PathVariable Long id){
+    public ResponseEntity<?> deletePlaylist(@PathVariable Long id) {
         Optional<Playlist> playlistOptional = playlistService.findById(id);
-        if(playlistOptional.isPresent()){
+        if (playlistOptional.isPresent()) {
             playlistService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -103,5 +106,24 @@ public class PlaylistController {
             return new ResponseEntity<>(playlistService.save(playlistOptional.get()),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @GetMapping("/searchByName/{name}")
+    public ResponseEntity<?> searchPlayListByName(@PathVariable String name) {
+        return new ResponseEntity<>(playlistService.findPlaylistByNameContains(name), HttpStatus.OK);
+    }
+
+    @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}/{userId}")
+    public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate, @PathVariable Long userId) throws ParseException {
+        Optional<User> userOptional = userService.findById(userId);
+        if(!userOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date a = formatter2.parse(startDate);
+        Date b = formatter2.parse(endDate);
+        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b,user ), HttpStatus.OK);
     }
 }
