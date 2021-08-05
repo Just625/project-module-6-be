@@ -18,7 +18,6 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);

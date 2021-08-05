@@ -136,4 +136,9 @@ public class SongController {
         this.songService.save(song.get());
         return new ResponseEntity<>(song.get(), HttpStatus.OK);
     }
+
+    @GetMapping("toplisten")
+    public ResponseEntity<Iterable<Song>> getTopSong(){
+        return new ResponseEntity<>(this.songService.getTopSong(), HttpStatus.OK);
+    }
 }

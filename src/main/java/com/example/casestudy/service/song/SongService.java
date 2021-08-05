@@ -46,4 +46,9 @@ public class SongService implements ISongService{
     public void deleteSongByIdAndUserId(Long userId, Long songId) {
         songRepository.deleteSongByIdAndUserId(userId, songId);
     }
+
+    @Override
+    public Iterable<Song> getTopSong() {
+        return songRepository.getTopSong();
+    }
 }
