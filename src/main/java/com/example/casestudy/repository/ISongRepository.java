@@ -35,4 +35,5 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     Iterable<Song> findByNameContainsAndAuthorContainsAndSingers_IdAndUser(String songName, String authorName, Long singerId, User user);
 
+    Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
 }
