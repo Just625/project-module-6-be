@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,7 +53,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> createAccount(@Valid @RequestBody User user, BindingResult bindingResult) {
+    public ResponseEntity<?> createAccount(@Valid @RequestBody User user, BindingResult bindingResult) {
+        Iterable<User> users = userService.findAll();
+        for (User currentUser : users) {
+            if (currentUser.getUsername().equals(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Username has been taken");
+            }
+        }
         if (!bindingResult.hasFieldErrors() && user.getPassword().length() >= 6 && user.getPassword().length() <= 8) {
             Set<Role> roles = new HashSet<>();
             roles.add(new Role(2L, "ROLE_USER"));

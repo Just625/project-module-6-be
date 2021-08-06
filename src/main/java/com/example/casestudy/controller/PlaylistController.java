@@ -114,13 +114,9 @@ public class PlaylistController {
         return new ResponseEntity<>(playlistService.findPlaylistByNameContains(name), HttpStatus.OK);
     }
 
-    @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}/{userId}")
-    public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate, @PathVariable Long userId) throws ParseException {
-        Optional<User> userOptional = userService.findById(userId);
-        if(!userOptional.isPresent()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        User user = userOptional.get();
+    @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}/{username}")
+    public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate, @PathVariable String username) throws ParseException {
+        User user = userService.findByUsername(username);
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         Date a = formatter2.parse(startDate);
         Date b = formatter2.parse(endDate);
