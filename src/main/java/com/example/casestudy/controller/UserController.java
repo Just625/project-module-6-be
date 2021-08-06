@@ -52,4 +52,8 @@ public class UserController {
         user1.setPassword(passwordEncoder.encode(user.getPassword()));
         return new ResponseEntity<>(userService.save(user1), HttpStatus.OK);
     }
+    @GetMapping("/list")
+    public ResponseEntity<Iterable<User>> getAllUsers(){
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
 }

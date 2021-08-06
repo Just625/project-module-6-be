@@ -6,6 +6,8 @@ import com.example.casestudy.service.singer.ISingerService;
 import com.example.casestudy.service.song.ISongService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,14 +44,14 @@ public class SongController {
         songDTO.setImgUrl(song.get().getImgUrl());
         Set<Singer> singers = song.get().getSingers();
         Long singerId = null;
-        for(Singer singer: singers) {
+        for (Singer singer : singers) {
             singerId = singer.getId();
             break;
         }
         songDTO.setSingers(singerId);
         Set<Genre> genres = song.get().getGenres();
         Long genreId = null;
-        for(Genre genre: genres) {
+        for (Genre genre : genres) {
             genreId = genre.getId();
             break;
         }
@@ -89,6 +91,12 @@ public class SongController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    @GetMapping("song/new")
+    public ResponseEntity<?> getSongOderByCrateAt(@RequestParam int offset,@RequestParam int limit){
+        return new ResponseEntity<>(songService.findAllOrderByCreatedAt(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
+    }
+
+
 
     @GetMapping("song/search/{keyword}/{id}")
     public ResponseEntity<Iterable<Song>> getSongByNameOrAuthor(@PathVariable String keyword, @PathVariable Long id) {
@@ -110,9 +118,9 @@ public class SongController {
     }
 
     @PutMapping("song")
-    public ResponseEntity<Song> updateSong(@RequestBody SongDTO songDTO){
+    public ResponseEntity<Song> updateSong(@RequestBody SongDTO songDTO) {
         Optional<Song> song = this.songService.findById(songDTO.getId());
-        if (!song.isPresent()){
+        if (!song.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         song.get().setName(songDTO.getName());
@@ -123,18 +131,32 @@ public class SongController {
         song.get().setImgUrl(songDTO.getImgUrl());
         Set<Genre> genres = new HashSet<>();
         Optional<Genre> genre = this.genreService.findById(songDTO.getGenres());
-        if (genre.isPresent()){
+        if (genre.isPresent()) {
             genres.add(genre.get());
             song.get().setGenres(genres);
         }
         Set<Singer> singers = new HashSet<>();
         Optional<Singer> singer = this.singerService.findById(songDTO.getSingers());
-        if (singer.isPresent()){
+        if (singer.isPresent()) {
             singers.add(singer.get());
             song.get().setSingers(singers);
         }
         this.songService.save(song.get());
         return new ResponseEntity<>(song.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("songs/findByName/{songName}")
+    public ResponseEntity<Iterable<Song>> findSongByName(@PathVariable String songName) {
+        return new ResponseEntity<>(songService.findSongByNameContains(songName), HttpStatus.OK);
+    }
+
+    @GetMapping("/songs/findSongAdvanced/{songName}/{authorName}/{singerId}/{userId}")
+    public ResponseEntity<Iterable<Song>> findSongFull(@PathVariable String songName, @PathVariable String authorName, @PathVariable Long singerId, @PathVariable Long userId) {
+        Optional<User> userOptional = userService.findById(userId);
+        if(!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(songService.findByNameContainsAndAuthorContainsAndSingers_IdAndUser(songName, authorName, singerId, userOptional.get()), HttpStatus.OK);
     }
 
     @GetMapping("toplisten")
