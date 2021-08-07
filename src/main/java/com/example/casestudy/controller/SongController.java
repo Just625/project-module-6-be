@@ -80,8 +80,6 @@ public class SongController {
         song.setUser(user.get());
         song.setListenCount(0);
         song.setLikes(0);
-        List commentList = new ArrayList<Comment>();
-        song.setCommentList(commentList);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
 

@@ -22,7 +22,8 @@ public class Singer {
     private String popularSong;
     private int likes;
     private String additionalInfo;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Comment> commentList;
     private String imageUrl;
+    @OneToOne
+    @JoinColumn(name="comment_type_id")
+    private CommentType commentType;
 }
