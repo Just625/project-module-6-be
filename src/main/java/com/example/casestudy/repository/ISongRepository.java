@@ -1,6 +1,7 @@
 package com.example.casestudy.repository;
 
 import com.example.casestudy.model.Playlist;
+import com.example.casestudy.model.Singer;
 import com.example.casestudy.model.Song;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public interface ISongRepository extends JpaRepository<Song, Long> {
 
@@ -34,5 +37,8 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     Iterable<Song> findSongByNameContains(String name);
 
     Iterable<Song> findByNameContainsAndAuthorContainsAndSingers_IdAndUser(String songName, String authorName, Long singerId, User user);
+
+    @Query(value = "select song_id from song_singers  where singers_id = ?1",nativeQuery = true)
+    List<Long> findSongsBySinger(Long singerId);
 
 }

@@ -10,9 +10,10 @@ public class SingerDTO {
     private String name;
     private String gender;
     private Long genres;
-    private String dOB;
+    private String dateOfBirth;
     private String biography;
     private String band;
     private String additionalInfo;
     private String imageUrl;
+    private  Long user;
 }
