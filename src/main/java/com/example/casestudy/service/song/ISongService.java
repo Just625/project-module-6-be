@@ -7,6 +7,8 @@ import com.example.casestudy.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ISongService extends IGeneralService<Song> {
     Iterable<Song> findSongByUserId(Long userId);
     Iterable<Song> findSongByNameOrAuthor(String keyword, Long id);
@@ -16,6 +18,7 @@ public interface ISongService extends IGeneralService<Song> {
     Iterable<Song> getTopSong();
 
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
+    List<Song> findSongsBySinger(Long singerId);
 
 
 }

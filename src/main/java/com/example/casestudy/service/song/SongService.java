@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +43,6 @@ public class SongService implements ISongService{
         return songRepository.findAllOrderByCreatedAt(pageable);
     }
 
-
     @Override
     public Iterable<Song> findSongByUserId(Long userId) {
         return songRepository.findSongByUserId(userId);
@@ -70,5 +71,18 @@ public class SongService implements ISongService{
     @Override
     public Iterable<Song> getTopSong() {
         return songRepository.getTopSong();
+    }
+
+    @Override
+    public List<Song> findSongsBySinger(Long singerId) {
+        List<Long> ids = songRepository.findSongsBySinger(singerId);
+        List<Song> songs = new ArrayList<>();
+        for (Long id: ids) {
+            Optional<Song> songOptional = findById(id);
+            if(songOptional.isPresent()){
+                songs.add(songOptional.get());
+            }
+        }
+        return songs;
     }
 }
