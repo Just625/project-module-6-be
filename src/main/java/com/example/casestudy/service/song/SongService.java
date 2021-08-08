@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,12 @@ public class SongService implements ISongService{
     public Page<Song> findAllOrderByCreatedAt(Pageable pageable) {
         return songRepository.findAllOrderByCreatedAt(pageable);
     }
+
+    @Override
+    public Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate) {
+        return songRepository.findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(songName, user, genreName, startDate, endDate);
+    }
+
 
     @Override
     public Iterable<Song> findSongByUserId(Long userId) {

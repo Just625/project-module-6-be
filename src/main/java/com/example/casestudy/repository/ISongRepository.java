@@ -41,4 +41,5 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     @Query(value = "select song_id from song_singers  where singers_id = ?1",nativeQuery = true)
     List<Long> findSongsBySinger(Long singerId);
 
+    Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
 }

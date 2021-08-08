@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -78,8 +80,6 @@ public class SongController {
         song.setUser(user.get());
         song.setListenCount(0);
         song.setLikes(0);
-        List commentList = new ArrayList<Comment>();
-        song.setCommentList(commentList);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
 
@@ -91,11 +91,11 @@ public class SongController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @GetMapping("song/new")
-    public ResponseEntity<?> getSongOderByCrateAt(@RequestParam int offset,@RequestParam int limit){
-        return new ResponseEntity<>(songService.findAllOrderByCreatedAt(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
-    }
 
+    @GetMapping("song/new")
+    public ResponseEntity<?> getSongOderByCrateAt(@RequestParam int offset, @RequestParam int limit) {
+        return new ResponseEntity<>(songService.findAllOrderByCreatedAt(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
 
 
     @GetMapping("song/search/{keyword}/{id}")
@@ -153,14 +153,23 @@ public class SongController {
     @GetMapping("/songs/findSongAdvanced/{songName}/{authorName}/{singerId}/{userId}")
     public ResponseEntity<Iterable<Song>> findSongFull(@PathVariable String songName, @PathVariable String authorName, @PathVariable Long singerId, @PathVariable Long userId) {
         Optional<User> userOptional = userService.findById(userId);
-        if(!userOptional.isPresent()) {
+        if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(songService.findByNameContainsAndAuthorContainsAndSingers_IdAndUser(songName, authorName, singerId, userOptional.get()), HttpStatus.OK);
     }
 
     @GetMapping("toplisten")
-    public ResponseEntity<Iterable<Song>> getTopSong(){
+    public ResponseEntity<Iterable<Song>> getTopSong() {
         return new ResponseEntity<>(this.songService.getTopSong(), HttpStatus.OK);
+    }
+
+    @GetMapping("/songs/findSongFull/{songName}/{userName}/{genreName}/{startDate}/{endDate}")
+    public ResponseEntity<Iterable<Song>> findSongFullAnother(@PathVariable String songName, @PathVariable String userName, @PathVariable String genreName, @PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        User user = userService.findByUsername(userName);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDay = formatter.parse(startDate);
+        Date endDay = formatter.parse(endDate);
+        return new ResponseEntity<>(songService.findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(songName, user, genreName, startDay, endDay), HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import com.example.casestudy.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
+
 import java.util.List;
 
 public interface ISongService extends IGeneralService<Song> {
@@ -20,5 +22,5 @@ public interface ISongService extends IGeneralService<Song> {
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
     List<Song> findSongsBySinger(Long singerId);
 
-
+    Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
 }

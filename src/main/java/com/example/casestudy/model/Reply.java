@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Comment {
+public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,5 +15,5 @@ public class Comment {
     private User user;
     private String content;
     @ManyToOne
-    private CommentType commentType;
+    private Comment comment;
 }

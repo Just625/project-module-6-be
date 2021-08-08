@@ -28,9 +28,10 @@ public class Song {
     private Set<Genre> genres = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Singer> singers = new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Comment> commentList;
     private Date createdAt;
+    @OneToOne
+    @JoinColumn(name="comment_type_id")
+    private CommentType commentType;
 
     public Song() {
         this.createdAt = new Date();
