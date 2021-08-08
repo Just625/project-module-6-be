@@ -6,6 +6,7 @@ import com.example.casestudy.service.playlist.IPlaylistService;
 import com.example.casestudy.service.song.ISongService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -75,13 +76,14 @@ public class PlaylistController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> editPlayListInfo(@PathVariable Long id,@Validated @RequestBody PlaylistDTO playlistDTO, BindingResult bindingResult){
+    public ResponseEntity<?> editPlayListInfo(@PathVariable Long id, @Validated @RequestBody PlaylistDTO playlistDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Optional<Playlist> playlistOptional = playlistService.findById(id);
-        if(playlistOptional.isPresent()){
+        if (playlistOptional.isPresent()) {
             Playlist playlist = playlistOptional.get();
             playlist.setName(playlistDTO.getName());
             playlist.setDescription(playlistDTO.getDescription());
@@ -90,20 +92,21 @@ public class PlaylistController {
             playlist.setGenres(genres);
             playlist.setImgUrl(playlistDTO.getImgUrl());
             playlist.setLastUpdated(new Date());
-            return new ResponseEntity<>(playlistService.save(playlist),HttpStatus.OK);
+            return new ResponseEntity<>(playlistService.save(playlist), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{songId}/{playlistId}")
-    public ResponseEntity<?> addSongToPlaylist(@PathVariable Long songId,@PathVariable Long playlistId){
+    public ResponseEntity<?> addSongToPlaylist(@PathVariable Long songId, @PathVariable Long playlistId) {
         Optional<Playlist> playlistOptional = playlistService.findById(playlistId);
         Optional<Song> songOptional = songService.findById(songId);
-        if(playlistOptional.isPresent()&&songOptional.isPresent()){
+        if (playlistOptional.isPresent() && songOptional.isPresent()) {
             Set<Song> songs = playlistOptional.get().getSongs();
             songs.add(songOptional.get());
             playlistOptional.get().setSongs(songs);
             playlistOptional.get().setLastUpdated(new Date());
-            return new ResponseEntity<>(playlistService.save(playlistOptional.get()),HttpStatus.OK);
+            return new ResponseEntity<>(playlistService.save(playlistOptional.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -117,13 +120,18 @@ public class PlaylistController {
     @GetMapping("/searchAdvanced/{genre}/{name}/{startDate}/{endDate}/{userId}")
     public ResponseEntity<Iterable<Playlist>> searchPlaylistA(@PathVariable String genre, @PathVariable String name, @PathVariable String startDate, @PathVariable String endDate, @PathVariable Long userId) throws ParseException {
         Optional<User> userOptional = userService.findById(userId);
-        if(!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user = userOptional.get();
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         Date a = formatter2.parse(startDate);
         Date b = formatter2.parse(endDate);
-        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b,user ), HttpStatus.OK);
+        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b, user), HttpStatus.OK);
+    }
+
+    @GetMapping("/toplisten")
+    public ResponseEntity<?> getPlaylistByTopListen(@RequestParam int offset, @RequestParam int limit){
+        return new ResponseEntity<>(playlistService.findPlayListByListenCount(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
     }
 }
