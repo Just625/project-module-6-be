@@ -33,9 +33,6 @@ public class Playlist {
     @ManyToMany
     private Set<Song> songs;
     private String imgUrl;
-    @OneToOne
-    @JoinColumn(name="comment_type_id")
-    private CommentType commentType;
 
     public Playlist (){
         this.createdAt = new Date();

@@ -1,6 +1,5 @@
 package com.example.casestudy.service.song;
 
-import com.example.casestudy.model.Playlist;
 import com.example.casestudy.model.Song;
 import com.example.casestudy.model.User;
 import com.example.casestudy.repository.ISongRepository;
