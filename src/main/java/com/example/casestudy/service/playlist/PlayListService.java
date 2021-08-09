@@ -60,6 +60,11 @@ public class PlayListService implements IPlaylistService {
     }
 
     @Override
+    public Page<Playlist> findPlayListByLikes(Pageable pageable) {
+        return this.playlistRepository.findPlayListByLikes(pageable);
+    }
+
+    @Override
     public Page<Playlist> findPlayListByListenCount(Pageable pageable) {
         return this.playlistRepository.findPlayListByListenCount(pageable);
     }
