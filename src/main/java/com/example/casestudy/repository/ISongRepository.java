@@ -43,5 +43,6 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
 
     Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
 
-
+    @Query(value ="select * from song order by likes desc ", nativeQuery = true)
+    Page<Song> findSongByLikes(Pageable pageable);
 }

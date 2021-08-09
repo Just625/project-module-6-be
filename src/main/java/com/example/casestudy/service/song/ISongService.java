@@ -18,6 +18,7 @@ public interface ISongService extends IGeneralService<Song> {
     Iterable<Song> findSongByNameContains(String name);
     Iterable<Song> findByNameContainsAndAuthorContainsAndSingers_IdAndUser(String songName, String authorName, Long singerId, User user);
     Iterable<Song> getTopSong();
+    Page<Song> findSongByLikes(Pageable pageable);
 
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
     List<Song> findSongsBySinger(Long singerId);

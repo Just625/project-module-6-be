@@ -172,4 +172,9 @@ public class SongController {
         Date endDay = formatter.parse(endDate);
         return new ResponseEntity<>(songService.findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(songName, user, genreName, startDay, endDay), HttpStatus.OK);
     }
+
+    @GetMapping("most_likes")
+    public ResponseEntity<?> getSongByLikes (@RequestParam int offset, @RequestParam int limit){
+        return new ResponseEntity<>(songService.findSongByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
 }

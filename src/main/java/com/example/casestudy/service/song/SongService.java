@@ -25,6 +25,11 @@ public class SongService implements ISongService{
     }
 
     @Override
+    public Page<Song> findSongByLikes(Pageable pageable) {
+        return songRepository.findSongByLikes(pageable);
+    }
+
+    @Override
     public Optional<Song> findById(Long id) {
         return songRepository.findById(id);
     }
