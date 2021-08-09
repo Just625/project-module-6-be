@@ -18,4 +18,6 @@ public interface IPlaylistService extends IGeneralService<Playlist> {
 
     Page<Playlist> findPlayListByListenCount(Pageable pageable);
 
+    Page<Playlist> findPlaylistByCreatedTime(Pageable pageable);
+
 }

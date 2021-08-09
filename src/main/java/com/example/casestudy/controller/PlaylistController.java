@@ -130,4 +130,9 @@ public class PlaylistController {
     public ResponseEntity<?> getPlaylistByTopListen(@RequestParam int offset, @RequestParam int limit){
         return new ResponseEntity<>(playlistService.findPlayListByListenCount(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
     }
+
+    @GetMapping("/most_recent")
+    public ResponseEntity<?> getPlaylistByMostRecent(@RequestParam int offset, @RequestParam int limit){
+        return new ResponseEntity<>(playlistService.findPlaylistByCreatedTime(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
 }

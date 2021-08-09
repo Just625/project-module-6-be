@@ -45,6 +45,11 @@ public class PlayListService implements IPlaylistService {
 
 
     @Override
+    public Page<Playlist> findPlaylistByCreatedTime(Pageable pageable) {
+        return playlistRepository.findPlaylistByCreatedTime(pageable);
+    }
+
+    @Override
     public Iterable<Playlist> findPlaylistByNameContains(String name) {
         return playlistRepository.findPlaylistByNameContains(name);
     }
