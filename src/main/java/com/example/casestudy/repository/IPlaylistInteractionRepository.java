@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IPlaylistInteractionRepository extends JpaRepository<PlaylistInteraction, Long> {
-    @Query(value= "select * from playlist_interaction where comment > '' AND playlist_id = ?1", nativeQuery = true)
+    @Query(value= "select * from playlist_interaction where comment > '' AND playlist_id = ?1 order by created_at desc", nativeQuery = true)
     Iterable<PlaylistInteraction> findPlaylistComment(Long id);
 }
