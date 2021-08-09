@@ -14,6 +14,8 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long senderId;
+    private Long recieverId;
     private String content;
     private String link;
     private boolean isRead;
