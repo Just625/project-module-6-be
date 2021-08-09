@@ -21,7 +21,7 @@ public class PlaylistInteraction {
     private Long senderId;
     private Long recieverId;
     private Long playlistId;
-    private String comment = " ";
+    private String comment = null;
     private Date createdAt;
     private String link;
     private boolean likes;
