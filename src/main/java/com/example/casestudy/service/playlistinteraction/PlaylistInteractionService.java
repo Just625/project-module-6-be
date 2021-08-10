@@ -1,4 +1,4 @@
-package com.example.casestudy.service.PlaylistInteraction;
+package com.example.casestudy.service.playlistinteraction;
 
 import com.example.casestudy.model.PlaylistInteraction;
 import com.example.casestudy.repository.IPlaylistInteractionRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class PlayListInteractionService implements IPlaylistInteractionService {
+public class PlaylistInteractionService implements IPlaylistInteractionService {
     @Autowired
     private IPlaylistInteractionRepository playlistInteractionRepository;
 

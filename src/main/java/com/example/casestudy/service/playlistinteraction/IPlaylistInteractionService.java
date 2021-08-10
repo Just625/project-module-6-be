@@ -1,4 +1,4 @@
-package com.example.casestudy.service.PlaylistInteraction;
+package com.example.casestudy.service.playlistinteraction;
 
 
 import com.example.casestudy.model.PlaylistInteraction;
