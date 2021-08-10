@@ -1,7 +1,7 @@
 package com.example.casestudy.controller;
 import com.example.casestudy.model.PlaylistInteraction;
 import com.example.casestudy.model.PlaylistInteractionDTO;
-import com.example.casestudy.service.PlaylistInteraction.IPlaylistInteractionService;
+import com.example.casestudy.service.playlistinteraction.IPlaylistInteractionService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -39,4 +39,19 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
     public Page<PlaylistInteraction> findPlaylistComment(Long id, Pageable pageable) {
         return playlistInteractionRepository.findPlaylistComment(id, pageable);
     }
+
+    @Override
+    public Iterable<PlaylistInteraction> findLikeByPlaylistId(Long playlistId) {
+        return playlistInteractionRepository.findLikeByPlaylistId(playlistId);
+    }
+
+    @Override
+    public Iterable<PlaylistInteraction> findLikeBySenderId(Long senderId) {
+        return playlistInteractionRepository.findLikeBySenderId(senderId);
+    }
+
+    @Override
+    public Optional<PlaylistInteraction> findLikeBySenderIdAndPlaylistId(Long senderId, Long playlistID) {
+        return playlistInteractionRepository.findLikeBySenderIdAndPlaylistId(senderId, playlistID);
+    }
 }
