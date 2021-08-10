@@ -19,6 +19,6 @@ public class Notification {
     private Long recieverId;
     private String content;
     private String link;
-    private boolean isRead;
+    private boolean status;
     private Date createDate;
 }
