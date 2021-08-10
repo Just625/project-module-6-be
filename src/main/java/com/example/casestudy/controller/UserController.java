@@ -1,6 +1,8 @@
 package com.example.casestudy.controller;
 
+import com.example.casestudy.model.Notification;
 import com.example.casestudy.model.User;
+import com.example.casestudy.service.notification.INotificationService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private INotificationService notificationService;
+
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         Optional<User> userOptional = userService.findById(id);
@@ -59,5 +64,15 @@ public class UserController {
     @GetMapping("/list")
     public ResponseEntity<Iterable<User>> getAllUsers() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/notifications")
+    public ResponseEntity<Iterable<Notification>> getAllNotificationByUser(@PathVariable Long id) {
+        return new ResponseEntity<>(notificationService.findAllByStatusIsFalseAndUser(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/notifications-desc")
+    public ResponseEntity<Iterable<Notification>> getAllNotificationByUserDateDesc(@PathVariable Long id) {
+        return new ResponseEntity<>(notificationService.findAllDateDesc(id), HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package com.example.casestudy.controller;
 import com.example.casestudy.model.*;
 import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.playlist.IPlaylistService;
+import com.example.casestudy.service.playlistinteraction.IPlaylistInteractionService;
 import com.example.casestudy.service.song.ISongService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class PlaylistController {
     private IUserService userService;
     @Autowired
     private ISongService songService;
+    @Autowired
+    private IPlaylistInteractionService playlistInteractionService;
 
     @PostMapping
     public ResponseEntity<Playlist> save(@Validated @RequestBody PlaylistDTO playlistDTO, BindingResult bindingResult) {
@@ -123,11 +126,44 @@ public class PlaylistController {
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         Date a = formatter2.parse(startDate);
         Date b = formatter2.parse(endDate);
-        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b,user ), HttpStatus.OK);
+        return new ResponseEntity<>(playlistService.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(genre, name, a, b, user), HttpStatus.OK);
     }
 
     @GetMapping("/toplisten")
-    public ResponseEntity<?> getPlaylistByTopListen(@RequestParam int offset, @RequestParam int limit){
-        return new ResponseEntity<>(playlistService.findPlayListByListenCount(PageRequest.of(offset,limit)).iterator(),HttpStatus.OK);
+    public ResponseEntity<?> getPlaylistByTopListen(@RequestParam int offset, @RequestParam int limit) {
+        return new ResponseEntity<>(playlistService.findPlayListByListenCount(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
+
+    @GetMapping("/findCommentById/{playlistId}")
+    public ResponseEntity<?> findCommentByPlaylistId(@PathVariable Long playlistId, @RequestParam int page, @RequestParam int size) {
+        Optional<Playlist> playlist = playlistService.findById(playlistId);
+        if (!playlist.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(playlistInteractionService.findPlaylistComment(playlistId, PageRequest.of(page, size)).iterator(), HttpStatus.OK);
+    }
+
+    @PostMapping("/addComment/{senderId}/{playlistId}/{comment}")
+    public ResponseEntity<PlaylistInteraction> addComment(@PathVariable Long senderId, @PathVariable Long playlistId, @PathVariable String comment) {
+        Optional<Playlist> playlistOptional = playlistService.findById(playlistId);
+        Optional<User> senderOptional = userService.findById(senderId);
+        if (!playlistOptional.isPresent() || !senderOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Date createdAt = new Date();
+        Long recieverId = playlistOptional.get().getUser().getId();
+        String link = "http://localhost:4200/playlist/" + playlistId;
+        PlaylistInteraction playlistInteraction = new PlaylistInteraction(senderId, recieverId, playlistId, comment, createdAt, link, false);
+        return new ResponseEntity<>(playlistInteractionService.save(playlistInteraction), HttpStatus.OK);
+    }
+
+    @GetMapping("/most_recent")
+    public ResponseEntity<?> getPlaylistByMostRecent(@RequestParam int offset, @RequestParam int limit){
+        return new ResponseEntity<>(playlistService.findPlaylistByCreatedTime(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
+
+    @GetMapping("/most_likes")
+    public ResponseEntity<?> getPlaylistByMostLikes(@RequestParam int offset, @RequestParam int limit){
+        return new ResponseEntity<>(playlistService.findPlayListByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
     }
 }

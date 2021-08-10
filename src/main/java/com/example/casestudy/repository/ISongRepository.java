@@ -13,9 +13,11 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ISongRepository extends JpaRepository<Song, Long> {
+    Optional<Song> findById(Long songId);
 
     @Query("select s from Song s where s.user.id = ?1")
     Iterable<Song> findSongByUserId(Long userId);
@@ -42,4 +44,7 @@ public interface ISongRepository extends JpaRepository<Song, Long> {
     List<Long> findSongsBySinger(Long singerId);
 
     Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
+
+    @Query(value ="select * from song order by likes desc ", nativeQuery = true)
+    Page<Song> findSongByLikes(Pageable pageable);
 }

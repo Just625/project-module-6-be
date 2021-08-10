@@ -45,6 +45,11 @@ public class PlayListService implements IPlaylistService {
 
 
     @Override
+    public Page<Playlist> findPlaylistByCreatedTime(Pageable pageable) {
+        return playlistRepository.findPlaylistByCreatedTime(pageable);
+    }
+
+    @Override
     public Iterable<Playlist> findPlaylistByNameContains(String name) {
         return playlistRepository.findPlaylistByNameContains(name);
     }
@@ -52,6 +57,11 @@ public class PlayListService implements IPlaylistService {
     @Override
     public Iterable<Playlist> findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(String name, String listName, Date startDate, Date endDate, User user) {
         return this.playlistRepository.findByGenres_NameAndNameContainsAndCreatedAtBetweenAndUser(name, listName, startDate, endDate, user);
+    }
+
+    @Override
+    public Page<Playlist> findPlayListByLikes(Pageable pageable) {
+        return this.playlistRepository.findPlayListByLikes(pageable);
     }
 
     @Override

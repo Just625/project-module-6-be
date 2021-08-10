@@ -19,4 +19,10 @@ public interface IPlaylistRepository extends JpaRepository<Playlist, Long> {
 
     @Query(value = "select * from playlist order by listen_count desc",nativeQuery = true)
     Page<Playlist> findPlayListByListenCount(Pageable pageable);
+
+    @Query(value = "select * from playlist order by created_at desc", nativeQuery = true)
+    Page<Playlist> findPlaylistByCreatedTime(Pageable pageable);
+
+    @Query(value ="select * from playlist order by likes desc ", nativeQuery = true)
+    Page<Playlist> findPlayListByLikes(Pageable pageable);
 }

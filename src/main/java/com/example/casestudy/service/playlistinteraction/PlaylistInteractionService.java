@@ -3,6 +3,8 @@ package com.example.casestudy.service.playlistinteraction;
 import com.example.casestudy.model.PlaylistInteraction;
 import com.example.casestudy.repository.IPlaylistInteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,7 +13,6 @@ import java.util.Optional;
 public class PlaylistInteractionService implements IPlaylistInteractionService {
     @Autowired
     private IPlaylistInteractionRepository playlistInteractionRepository;
-
 
     @Override
     public Iterable<PlaylistInteraction> findAll() {
@@ -35,8 +36,13 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
 
 
     @Override
-    public Optional<PlaylistInteraction> findLikeBySenderIdAndPlaylistId(Long senderId, Long playlistID) {
-        return playlistInteractionRepository.findLikeBySenderIdAndPlaylistId(senderId, playlistID);
+    public Page<PlaylistInteraction> findPlaylistComment(Long id, Pageable pageable) {
+        return playlistInteractionRepository.findPlaylistComment(id, pageable);
+    }
+
+    @Override
+    public Iterable<PlaylistInteraction> findLikeByPlaylistId(Long playlistId) {
+        return playlistInteractionRepository.findLikeByPlaylistId(playlistId);
     }
 
     @Override
@@ -45,7 +51,7 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
     }
 
     @Override
-    public Iterable<PlaylistInteraction> findLikeByPlaylistId(Long playlistId) {
-        return playlistInteractionRepository.findLikeByPlaylistId(playlistId);
+    public Optional<PlaylistInteraction> findLikeBySenderIdAndPlaylistId(Long senderId, Long playlistID) {
+        return playlistInteractionRepository.findLikeBySenderIdAndPlaylistId(senderId, playlistID);
     }
 }

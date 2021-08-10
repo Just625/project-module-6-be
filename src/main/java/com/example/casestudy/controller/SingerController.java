@@ -8,12 +8,12 @@ import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/singers")
@@ -43,10 +43,18 @@ public class SingerController {
     }
 
     @PostMapping
-    public ResponseEntity<Singer> save(@RequestBody SingerDTO singerDTO) {
+    public ResponseEntity<Singer> save(@RequestBody SingerDTO singerDTO) throws ParseException {
+        Iterable<Singer> singers = singerService.findAll();
+        for (Singer singer1 : singers) {
+            if (singer1.getName().equals(singerDTO.getName())) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
         Singer singer = new Singer();
         singer.setName(singerDTO.getName());
-        singer.setDateOfBirth(singerDTO.getDateOfBirth());
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+        Date dOB = formatter2.parse(singerDTO.getDateOfBirth());
+        singer.setDateOfBirth(dOB);
         singer.setGender(singerDTO.getGender());
         singer.setBand(singerDTO.getBand());
         singer.setBiography(singerDTO.getBiography());
@@ -79,9 +87,9 @@ public class SingerController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("/{id}/songs")
-    public ResponseEntity<?> getAllSongsOfSinger (@PathVariable Long id){
+    public ResponseEntity<?> getAllSongsOfSinger(@PathVariable Long id) {
         List<Song> songs = songService.findSongsBySinger(id);
-        return new ResponseEntity<>(songs,HttpStatus.OK);
+        return new ResponseEntity<>(songs, HttpStatus.OK);
     }
     @GetMapping("/search/{name}")
     public ResponseEntity<?> findByName(@PathVariable String name){
@@ -92,5 +100,19 @@ public class SingerController {
             return new ResponseEntity<>(new Singer(),HttpStatus.NO_CONTENT);
 
         }
+    }
+
+    @GetMapping("/findByName/{singerName}")
+    public ResponseEntity<Iterable<Singer>> findSingerByName(@PathVariable String singerName) {
+        return new ResponseEntity<>(singerService.findByNameContains(singerName), HttpStatus.OK);
+    }
+
+    @GetMapping("/findSingerAdvanced/{singerName}/{userName}/{genreName}/{startDate}/{endDate}")
+    public ResponseEntity<Iterable<Singer>> findSingerAdvanced(@PathVariable String singerName, @PathVariable String userName, @PathVariable String genreName, @PathVariable String startDate, @PathVariable String endDate) throws ParseException {
+        User user = userService.findByUsername(userName);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDay = formatter.parse(startDate);
+        Date endDay = formatter.parse(endDate);
+        return new ResponseEntity<>(singerService.findSingerByNameContainsAndUserAndGenres_NameAndAndDateOfBirthBetween(singerName, user, genreName, startDay, endDay), HttpStatus.OK);
     }
 }

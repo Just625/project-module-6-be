@@ -1,6 +1,5 @@
 package com.example.casestudy.service.song;
 
-import com.example.casestudy.model.Playlist;
 import com.example.casestudy.model.Song;
 import com.example.casestudy.model.User;
 import com.example.casestudy.repository.ISongRepository;
@@ -22,6 +21,11 @@ public class SongService implements ISongService{
     @Override
     public Iterable<Song> findAll() {
         return songRepository.findAll();
+    }
+
+    @Override
+    public Page<Song> findSongByLikes(Pageable pageable) {
+        return songRepository.findSongByLikes(pageable);
     }
 
     @Override

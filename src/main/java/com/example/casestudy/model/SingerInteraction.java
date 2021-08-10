@@ -22,4 +22,8 @@ public class SingerInteraction {
     private String link;
     private boolean likes;
     private boolean isRead;
+
+    public SingerInteraction(){
+        this.createdAt = new Date();
+    }
 }

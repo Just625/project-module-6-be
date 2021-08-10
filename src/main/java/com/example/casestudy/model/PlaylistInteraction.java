@@ -1,5 +1,6 @@
 package com.example.casestudy.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@AllArgsConstructor
 public class PlaylistInteraction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +20,7 @@ public class PlaylistInteraction {
     private Long senderId;
     private Long recieverId;
     private Long playlistId;
-    private String comment;
+    private String comment = null;
     private Date createdAt;
     private String link;
     private boolean likes = false;
@@ -26,5 +28,15 @@ public class PlaylistInteraction {
 
     public PlaylistInteraction(){
         this.createdAt = new Date();
+    }
+
+    public PlaylistInteraction(Long senderId, Long recieverId, Long playlistId, String comment, Date createdAt, String link, boolean isRead) {
+        this.senderId = senderId;
+        this.recieverId = recieverId;
+        this.playlistId = playlistId;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.link = link;
+        this.isRead = isRead;
     }
 }
