@@ -3,6 +3,8 @@ package com.example.casestudy.service.playlistinteraction;
 import com.example.casestudy.model.PlaylistInteraction;
 import com.example.casestudy.repository.IPlaylistInteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,8 +34,9 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
         playlistInteractionRepository.deleteById(id);
     }
 
+
     @Override
-    public Iterable<PlaylistInteraction> findPlaylistComment(Long id) {
-        return playlistInteractionRepository.findPlaylistComment(id);
+    public Page<PlaylistInteraction> findPlaylistComment(Long id, Pageable pageable) {
+        return playlistInteractionRepository.findPlaylistComment(id, pageable);
     }
 }

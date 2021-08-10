@@ -135,12 +135,12 @@ public class PlaylistController {
     }
 
     @GetMapping("/findCommentById/{playlistId}")
-    public ResponseEntity<Iterable<PlaylistInteraction>> findCommentByPlaylistId(@PathVariable Long playlistId) {
+    public ResponseEntity<?> findCommentByPlaylistId(@PathVariable Long playlistId, @RequestParam int page, @RequestParam int size) {
         Optional<Playlist> playlist = playlistService.findById(playlistId);
         if (!playlist.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(playlistInteractionService.findPlaylistComment(playlistId), HttpStatus.OK);
+        return new ResponseEntity<>(playlistInteractionService.findPlaylistComment(playlistId, PageRequest.of(page, size)).iterator(), HttpStatus.OK);
     }
 
     @PostMapping("/addComment/{senderId}/{playlistId}/{comment}")
