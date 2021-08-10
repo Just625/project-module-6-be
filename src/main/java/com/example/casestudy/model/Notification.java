@@ -19,4 +19,5 @@ public class Notification {
     private String link;
     private boolean status;
     private Date createDate;
+    private String action;
 }
