@@ -26,7 +26,7 @@ public class Song {
     private  User user;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres = new HashSet<>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<Singer> singers = new HashSet<>();
     private Date createdAt;
 

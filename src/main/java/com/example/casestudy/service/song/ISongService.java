@@ -22,6 +22,5 @@ public interface ISongService extends IGeneralService<Song> {
 
     Page<Song> findAllOrderByCreatedAt(Pageable pageable);
     List<Song> findSongsBySinger(Long singerId);
-
     Iterable<Song> findByNameContainsAndUserAndGenres_NameAndCreatedAtBetween(String songName, User user, String genreName, Date startDate, Date endDate);
 }

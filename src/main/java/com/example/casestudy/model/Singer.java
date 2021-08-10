@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class Singer {
     private String gender;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres = new HashSet<>();
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String biography;
     private String band;
     private String popularSong;
