@@ -1,6 +1,7 @@
 package com.example.casestudy.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,10 @@ public class PlaylistInteraction {
     private String comment;
     private Date createdAt;
     private String link;
-    private boolean likes;
-    private boolean isRead;
+    private boolean likes = false;
+    private boolean isRead = false;
+
+    public PlaylistInteraction(){
+        this.createdAt = new Date();
+    }
 }

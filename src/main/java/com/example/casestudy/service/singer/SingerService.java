@@ -32,4 +32,9 @@ public class SingerService implements ISingerService {
     public void deleteById(Long id) {
         singerRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Singer> findSingerByName(String name) {
+        return singerRepository.findSingerByName(name);
+    }
 }

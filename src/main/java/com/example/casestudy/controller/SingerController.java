@@ -44,12 +44,6 @@ public class SingerController {
 
     @PostMapping
     public ResponseEntity<Singer> save(@RequestBody SingerDTO singerDTO) {
-        Iterable<Singer> singers = singerService.findAll();
-        for (Singer singer1:singers) {
-            if(singer1.getName().equals(singerDTO.getName()) ){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
         Singer singer = new Singer();
         singer.setName(singerDTO.getName());
         singer.setDateOfBirth(singerDTO.getDateOfBirth());
@@ -88,5 +82,15 @@ public class SingerController {
     public ResponseEntity<?> getAllSongsOfSinger (@PathVariable Long id){
         List<Song> songs = songService.findSongsBySinger(id);
         return new ResponseEntity<>(songs,HttpStatus.OK);
+    }
+    @GetMapping("/search/{name}")
+    public ResponseEntity<?> findByName(@PathVariable String name){
+        Optional<Singer> singerOptional = singerService.findSingerByName(name);
+        if (singerOptional.isPresent()){
+            return new ResponseEntity<>(singerOptional.get(),HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new Singer(),HttpStatus.NO_CONTENT);
+
+        }
     }
 }
