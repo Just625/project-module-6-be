@@ -63,6 +63,15 @@ public class SongController {
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/songs/{id}")
+    public ResponseEntity<Song> getSongById(@PathVariable Long id) {
+        Optional<Song> songOptional = songService.findById(id);
+        if(!songOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(songOptional.get(), HttpStatus.OK);
+    }
+
     @PostMapping("song")
     public ResponseEntity<Song> createNewSong(@RequestBody SongDTO songDTO) {
         Song song = new Song();
@@ -174,7 +183,7 @@ public class SongController {
     }
 
     @GetMapping("most_likes")
-    public ResponseEntity<?> getSongByLikes (@RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<?> getSongByLikes(@RequestParam int offset, @RequestParam int limit) {
         return new ResponseEntity<>(songService.findSongByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
     }
 }

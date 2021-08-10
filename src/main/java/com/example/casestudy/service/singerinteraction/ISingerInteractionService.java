@@ -1,7 +1,7 @@
-package com.example.casestudy.service.songinteraction;
+package com.example.casestudy.service.singerinteraction;
 
-import com.example.casestudy.model.SongInteraction;
+import com.example.casestudy.model.SingerInteraction;
 import com.example.casestudy.service.IGeneralService;
 
-public interface ISongInteractionService extends IGeneralService<SongInteraction> {
+public interface ISingerInteractionService extends IGeneralService<SingerInteraction> {
 }

@@ -1,33 +1,33 @@
-package com.example.casestudy.service.songinteraction;
+package com.example.casestudy.service.singerinteraction;
 
-import com.example.casestudy.model.SongInteraction;
-import com.example.casestudy.repository.ISongInteractionRepository;
+import com.example.casestudy.model.SingerInteraction;
+import com.example.casestudy.repository.ISingerInteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class SongInteractionService implements ISongInteractionService{
+public class SingerInteractionService implements ISingerInteractionService {
     @Autowired
-    private ISongInteractionRepository songInteractionRepository;
+    private ISingerInteractionRepository singerInteractionRepository;
     @Override
-    public Iterable<SongInteraction> findAll() {
-        return songInteractionRepository.findAll();
+    public Iterable<SingerInteraction> findAll() {
+        return singerInteractionRepository.findAll();
     }
 
     @Override
-    public Optional<SongInteraction> findById(Long id) {
-        return songInteractionRepository.findById(id);
+    public Optional<SingerInteraction> findById(Long id) {
+        return singerInteractionRepository.findById(id);
     }
 
     @Override
-    public SongInteraction save(SongInteraction songInteraction) {
-        return songInteractionRepository.save(songInteraction);
+    public SingerInteraction save(SingerInteraction singerInteraction) {
+        return singerInteractionRepository.save(singerInteraction);
     }
 
     @Override
     public void deleteById(Long id) {
-         songInteractionRepository.deleteById(id);
+         singerInteractionRepository.deleteById(id);
     }
 }
