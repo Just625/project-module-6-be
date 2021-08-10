@@ -38,4 +38,14 @@ public class NotificationService implements INotificationService {
     public void deleteById(Long id) {
         notificationRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Notification> findAllByStatusIsFalseAndUser(Long id) {
+        return notificationRepository.findAllByStatusIsFalseAndUser(id);
+    }
+
+    @Override
+    public Iterable<Notification> findAllDateDesc(Long id) {
+        return notificationRepository.findAllDateDesc(id);
+    }
 }

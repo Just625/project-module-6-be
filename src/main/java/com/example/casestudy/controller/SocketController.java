@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @CrossOrigin("*")
 @RestController
 public class SocketController {
@@ -17,6 +19,10 @@ public class SocketController {
     @MessageMapping("/notifications")
     @SendTo("/topic/notifications")
     public Notification createNewNotificationUsingSocket(Notification notification){
-        return notificationService.save(notification);
+        long milis = System.currentTimeMillis();
+        Date date = new Date(milis);
+        notification.setCreateDate(date);
+        notificationService.save(notification);
+        return notification;
     }
 }
