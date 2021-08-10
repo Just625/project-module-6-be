@@ -29,9 +29,6 @@ public class Song {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Singer> singers = new HashSet<>();
     private Date createdAt;
-    @OneToOne
-    @JoinColumn(name="comment_type_id")
-    private CommentType commentType;
 
     public Song() {
         this.createdAt = new Date();

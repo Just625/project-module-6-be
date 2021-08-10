@@ -27,9 +27,7 @@ public class Singer {
     private int likes;
     private String additionalInfo;
     private String imageUrl;
-    @OneToOne
-    @JoinColumn(name="comment_type_id")
-    private CommentType commentType;
+
     @ManyToOne
     private  User user;
 
