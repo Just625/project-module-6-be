@@ -26,4 +26,14 @@ public class SongInteraction {
     private String link;
     private boolean likes = false;
     private boolean isRead = false;
+
+    public SongInteraction(Long senderId, Long recieverId, Long songId, String comment, Date createdAt, String link, boolean isRead) {
+        this.senderId = senderId;
+        this.recieverId = recieverId;
+        this.songId = songId;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.link = link;
+        this.isRead = isRead;
+    }
 }

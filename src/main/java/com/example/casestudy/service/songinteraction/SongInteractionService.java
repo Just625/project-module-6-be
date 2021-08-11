@@ -3,6 +3,8 @@ package com.example.casestudy.service.songinteraction;
 import com.example.casestudy.model.SongInteraction;
 import com.example.casestudy.repository.ISongInteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,5 +31,10 @@ public class SongInteractionService implements ISongInteractionService{
     @Override
     public void deleteById(Long id) {
          songInteractionRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<SongInteraction> findSongComment(Long id, Pageable pageable) {
+        return songInteractionRepository.findSongComment(id, pageable);
     }
 }
