@@ -11,4 +11,5 @@ public interface INotificationRepository extends JpaRepository<Notification, Lon
 
     @Query("select n from Notification n where n.recieverId = ?1 order by n.createDate desc")
     Iterable<Notification> findAllDateDesc(Long id);
+
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin("*")
@@ -55,5 +56,15 @@ public class NotificationController {
     public ResponseEntity<Notification> getNotification(@PathVariable Long id) {
         Optional<Notification> notificationOptional = notificationService.findById(id);
         return notificationOptional.map(notification -> new ResponseEntity<>(notification, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/changeAll/{id}")
+    public ResponseEntity<?> changeAllStatus(@PathVariable Long id){
+        List<Notification> notifications = (List<Notification>) notificationService.findAllByStatusIsFalseAndUser(id);
+        for (Notification notification: notifications){
+            notification.setStatus(true);
+            notificationService.save(notification);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
