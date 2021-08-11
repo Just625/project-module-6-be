@@ -3,12 +3,13 @@ package com.example.casestudy.controller;
 import com.example.casestudy.model.*;
 import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.singer.ISingerService;
+import com.example.casestudy.service.singerinteraction.ISingerInteractionService;
 import com.example.casestudy.service.song.ISongService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -27,6 +28,9 @@ public class SingerController {
     private IGenreService genreService;
     @Autowired
     private ISongService songService;
+
+    @Autowired
+    private ISingerInteractionService singerInteractionService;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -114,5 +118,27 @@ public class SingerController {
         Date startDay = formatter.parse(startDate);
         Date endDay = formatter.parse(endDate);
         return new ResponseEntity<>(singerService.findSingerByNameContainsAndUserAndGenres_NameAndAndDateOfBirthBetween(singerName, user, genreName, startDay, endDay), HttpStatus.OK);
+    }
+    @GetMapping("/findCommentById/{singerId}")
+    public ResponseEntity<?> findCommentBySingerId(@PathVariable Long singerId, @RequestParam int page, @RequestParam int size) {
+        Optional<Singer> singerOptional = singerService.findById(singerId);
+        if (!singerOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(singerInteractionService.findSingerComment(singerId, PageRequest.of(page, size)).iterator(), HttpStatus.OK);
+    }
+
+    @PostMapping("/addComment/{senderId}/{singerId}/{comment}")
+    public ResponseEntity<SingerInteraction> addComment(@PathVariable Long senderId, @PathVariable Long singerId, @PathVariable String comment) {
+        Optional<Singer> singerOptional = singerService.findById(singerId);
+        Optional<User> senderOptional = userService.findById(senderId);
+        if (!singerOptional.isPresent() || !senderOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Date createdAt = new Date();
+        Long recieverId = singerOptional.get().getUser().getId();
+        String link = "http://localhost:4200/singer/" + singerId;
+        SingerInteraction singerInteraction = new SingerInteraction(senderId, recieverId, singerId, comment, createdAt, link, false);
+        return new ResponseEntity<>(singerInteractionService.save(singerInteraction), HttpStatus.OK);
     }
 }
