@@ -71,14 +71,14 @@ public class SongController {
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable Long id) {
         Optional<Song> songOptional = songService.findById(id);
-        if(!songOptional.isPresent()){
+        if (!songOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(songOptional.get(), HttpStatus.OK);
     }
 
     @PostMapping("song")
-    public ResponseEntity<Song> createNewSong(@RequestBody SongDTO songDTO) {
+    public ResponseEntity<Song> createNewSong(@RequestBody SongDTO2 songDTO) {
         Song song = new Song();
         song.setName(songDTO.getName());
         song.setAuthor(songDTO.getAuthor());
@@ -88,14 +88,19 @@ public class SongController {
         song.setFileMp3(songDTO.getMp3Url());
         Optional<User> user = userService.findById(songDTO.getUserId());
         Optional<Genre> genre = genreService.findById(songDTO.getGenres());
-        Optional<Singer> singer = singerService.findById(songDTO.getSingers());
+        Set<Singer> singer = new HashSet<>();
+        for (int i = 0; i < songDTO.getSingers().size(); i++) {
+            Singer currentSinger = singerService.findById(Long.parseLong(songDTO.getSingers().get(i))).get();
+            singer.add(currentSinger);
+        }
         song.getGenres().add(genre.get());
-        song.getSingers().add(singer.get());
+        song.setSingers(singer);
         song.setUser(user.get());
         song.setListenCount(0);
         song.setLikes(0);
         return new ResponseEntity<>(songService.save(song), HttpStatus.CREATED);
     }
+
 
     @GetMapping("song/userId/{id}")
     public ResponseEntity<Iterable<Song>> getAllSongByUserId(@PathVariable Long id) {
@@ -132,7 +137,7 @@ public class SongController {
     }
 
     @PutMapping("song")
-    public ResponseEntity<Song> updateSong(@RequestBody SongDTO songDTO) {
+    public ResponseEntity<Song> updateSong(@RequestBody SongDTO2 songDTO) {
         Optional<Song> song = this.songService.findById(songDTO.getId());
         if (!song.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -150,11 +155,11 @@ public class SongController {
             song.get().setGenres(genres);
         }
         Set<Singer> singers = new HashSet<>();
-        Optional<Singer> singer = this.singerService.findById(songDTO.getSingers());
-        if (singer.isPresent()) {
-            singers.add(singer.get());
-            song.get().setSingers(singers);
+        for (int i = 0; i < songDTO.getSingers().size(); i++) {
+            Singer currentSinger = singerService.findById(Long.parseLong(songDTO.getSingers().get(i))).get();
+            singers.add(currentSinger);
         }
+        song.get().setSingers(singers);
         this.songService.save(song.get());
         return new ResponseEntity<>(song.get(), HttpStatus.OK);
     }
@@ -193,15 +198,16 @@ public class SongController {
     }
 
     @GetMapping("increase-listen-count/{id}")
-    public ResponseEntity<?> increaseListenCount (@PathVariable Long id){
+    public ResponseEntity<?> increaseListenCount(@PathVariable Long id) {
         Optional<Song> song = songService.findById(id);
-        if (song.isPresent()){
-            song.get().setListenCount(song.get().getListenCount()+1);
+        if (song.isPresent()) {
+            song.get().setListenCount(song.get().getListenCount() + 1);
             songService.save(song.get());
             return new ResponseEntity<>(song.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/songs/findCommentById/{songId}")
     public ResponseEntity<?> findCommentBySongId(@PathVariable Long songId, @RequestParam int page, @RequestParam int size) {
         Optional<Song> songOptional = songService.findById(songId);
