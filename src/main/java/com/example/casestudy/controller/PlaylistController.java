@@ -158,12 +158,23 @@ public class PlaylistController {
     }
 
     @GetMapping("/most_recent")
-    public ResponseEntity<?> getPlaylistByMostRecent(@RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<?> getPlaylistByMostRecent(@RequestParam int offset, @RequestParam int limit) {
         return new ResponseEntity<>(playlistService.findPlaylistByCreatedTime(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
     }
 
     @GetMapping("/most_likes")
-    public ResponseEntity<?> getPlaylistByMostLikes(@RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<?> getPlaylistByMostLikes(@RequestParam int offset, @RequestParam int limit) {
         return new ResponseEntity<>(playlistService.findPlayListByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/like/{like}")
+    public ResponseEntity<?> setPlaylistLikes(@PathVariable Long id, @PathVariable int like) {
+        Optional<Playlist> playlist = playlistService.findById(id);
+        if (playlist.isPresent()){
+            playlist.get().setLikes(like);
+            playlistService.save(playlist.get());
+            return new ResponseEntity<>(playlist, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

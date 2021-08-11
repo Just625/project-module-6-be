@@ -177,4 +177,15 @@ public class SongController {
     public ResponseEntity<?> getSongByLikes (@RequestParam int offset, @RequestParam int limit){
         return new ResponseEntity<>(songService.findSongByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
     }
+
+    @GetMapping("increase-listen-count/{id}")
+    public ResponseEntity<?> increaseListenCount (@PathVariable Long id){
+        Optional<Song> song = songService.findById(id);
+        if (song.isPresent()){
+            song.get().setListenCount(song.get().getListenCount()+1);
+            songService.save(song.get());
+            return new ResponseEntity<>(song.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
