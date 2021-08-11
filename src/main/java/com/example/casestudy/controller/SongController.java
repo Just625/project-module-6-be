@@ -1,9 +1,11 @@
 package com.example.casestudy.controller;
 
 import com.example.casestudy.model.*;
+import com.example.casestudy.repository.ISongInteractionRepository;
 import com.example.casestudy.service.genre.IGenreService;
 import com.example.casestudy.service.singer.ISingerService;
 import com.example.casestudy.service.song.ISongService;
+import com.example.casestudy.service.songinteraction.ISongInteractionService;
 import com.example.casestudy.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,9 @@ public class SongController {
 
     @Autowired
     private ISingerService singerService;
+
+    @Autowired
+    private ISongInteractionService songInteractionService;
 
     @GetMapping("song/{id}")
     public ResponseEntity<SongDTO> getSong(@PathVariable Long id) {
@@ -61,6 +66,15 @@ public class SongController {
         songDTO.setMp3Url(song.get().getFileMp3());
         songDTO.setUserId(song.get().getUser().getId());
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/songs/{id}")
+    public ResponseEntity<Song> getSongById(@PathVariable Long id) {
+        Optional<Song> songOptional = songService.findById(id);
+        if(!songOptional.isPresent()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(songOptional.get(), HttpStatus.OK);
     }
 
     @PostMapping("song")
@@ -174,7 +188,7 @@ public class SongController {
     }
 
     @GetMapping("most_likes")
-    public ResponseEntity<?> getSongByLikes (@RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<?> getSongByLikes(@RequestParam int offset, @RequestParam int limit) {
         return new ResponseEntity<>(songService.findSongByLikes(PageRequest.of(offset, limit)).iterator(), HttpStatus.OK);
     }
 
@@ -187,5 +201,27 @@ public class SongController {
             return new ResponseEntity<>(song.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    @GetMapping("/songs/findCommentById/{songId}")
+    public ResponseEntity<?> findCommentBySongId(@PathVariable Long songId, @RequestParam int page, @RequestParam int size) {
+        Optional<Song> songOptional = songService.findById(songId);
+        if (!songOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(songInteractionService.findSongComment(songId, PageRequest.of(page, size)).iterator(), HttpStatus.OK);
+    }
+
+    @PostMapping("/songs/addComment/{senderId}/{songId}/{comment}")
+    public ResponseEntity<SongInteraction> addComment(@PathVariable Long senderId, @PathVariable Long songId, @PathVariable String comment) {
+        Optional<Song> songOptional = songService.findById(songId);
+        Optional<User> senderOptional = userService.findById(senderId);
+        if (!songOptional.isPresent() || !senderOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Date createdAt = new Date();
+        Long recieverId = songOptional.get().getUser().getId();
+        String link = "http://localhost:4200/songs/detail/" + songId;
+        SongInteraction songInteraction = new SongInteraction(senderId, recieverId, songId, comment, createdAt, link, false);
+        return new ResponseEntity<>(songInteractionService.save(songInteraction), HttpStatus.OK);
     }
 }
