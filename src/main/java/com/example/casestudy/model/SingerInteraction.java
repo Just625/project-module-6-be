@@ -13,7 +13,6 @@ import java.util.Date;
 @Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 public class SingerInteraction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,11 @@ public class SingerInteraction {
     private String link;
     private boolean likes = false;
     private boolean isRead = false;
+
+    public SingerInteraction(){
+        this.createdAt = new Date();
+    }
+
 
     public SingerInteraction(Long senderId, Long recieverId, Long singerId, String comment, Date createdAt, String link, boolean isRead) {
         this.senderId = senderId;

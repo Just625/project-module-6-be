@@ -14,6 +14,7 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
     @Autowired
     private IPlaylistInteractionRepository playlistInteractionRepository;
 
+
     @Override
     public Iterable<PlaylistInteraction> findAll() {
         return playlistInteractionRepository.findAll();
@@ -36,13 +37,8 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
 
 
     @Override
-    public Page<PlaylistInteraction> findPlaylistComment(Long id, Pageable pageable) {
-        return playlistInteractionRepository.findPlaylistComment(id, pageable);
-    }
-
-    @Override
-    public Iterable<PlaylistInteraction> findLikeByPlaylistId(Long playlistId) {
-        return playlistInteractionRepository.findLikeByPlaylistId(playlistId);
+    public Optional<PlaylistInteraction> findLikeBySenderIdAndPlaylistId(Long senderId, Long playlistID) {
+        return playlistInteractionRepository.findLikeBySenderIdAndPlaylistId(senderId, playlistID);
     }
 
     @Override
@@ -51,7 +47,12 @@ public class PlaylistInteractionService implements IPlaylistInteractionService {
     }
 
     @Override
-    public Optional<PlaylistInteraction> findLikeBySenderIdAndPlaylistId(Long senderId, Long playlistID) {
-        return playlistInteractionRepository.findLikeBySenderIdAndPlaylistId(senderId, playlistID);
+    public Page<PlaylistInteraction> findPlaylistComment(Long id, Pageable pageable) {
+        return playlistInteractionRepository.findPlaylistComment(id, pageable);
+    }
+
+    @Override
+    public Iterable<PlaylistInteraction> findLikeByPlaylistId(Long playlistId) {
+        return playlistInteractionRepository.findLikeByPlaylistId(playlistId);
     }
 }

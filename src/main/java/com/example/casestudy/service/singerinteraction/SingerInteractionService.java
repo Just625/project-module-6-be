@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Service
 public class SingerInteractionService implements ISingerInteractionService {
-    @Autowired
-    private ISingerInteractionRepository singerInteractionRepository;
+     @Autowired
+     private  ISingerInteractionRepository singerInteractionRepository;
     @Override
     public Iterable<SingerInteraction> findAll() {
         return singerInteractionRepository.findAll();
@@ -30,7 +30,22 @@ public class SingerInteractionService implements ISingerInteractionService {
 
     @Override
     public void deleteById(Long id) {
-         singerInteractionRepository.deleteById(id);
+        singerInteractionRepository.deleteById(id);
+    }
+
+    @Override
+    public Iterable<SingerInteraction> findLikeBySingerId(Long singerId) {
+        return singerInteractionRepository.findLikeBySingerId(singerId);
+    }
+
+    @Override
+    public Iterable<SingerInteraction> findLikeBySenderId(Long senderId) {
+        return singerInteractionRepository.findLikeBySenderId(senderId);
+    }
+
+    @Override
+    public Optional<SingerInteraction> findLikeBySenderIdAndSingerId(Long senderId, Long singerId) {
+        return singerInteractionRepository.findLikeBySenderIdAndSinger(senderId, singerId);
     }
 
     @Override
