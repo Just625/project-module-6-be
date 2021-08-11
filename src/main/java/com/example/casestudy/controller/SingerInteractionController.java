@@ -28,11 +28,11 @@ public class SingerInteractionController {
     public ResponseEntity<?> getFavouritesByUser(@PathVariable Long userId){
         return new ResponseEntity<>(singerInteractionService.findLikeBySenderId(userId), HttpStatus.OK);
     }
-    @GetMapping("/singer/{singerId}")
+    @GetMapping("/singerId/{singerId}")
     public ResponseEntity<?> getFavouritesBySinger(@PathVariable Long singerId){
         return new ResponseEntity<>(singerInteractionService.findLikeBySingerId(singerId), HttpStatus.OK);
     }
-    @GetMapping("/userId/{userId}/singer/{singerId}")
+    @GetMapping("/userId/{userId}/singerId/{singerId}")
     public ResponseEntity<?> getFavouriteByUserAndSinger(@PathVariable Long userId, @PathVariable Long singerId){
         return new ResponseEntity<>(singerInteractionService.findLikeBySenderIdAndSingerId(userId,singerId), HttpStatus.OK);
     }
