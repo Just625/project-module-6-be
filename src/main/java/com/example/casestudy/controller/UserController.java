@@ -47,13 +47,16 @@ public class UserController {
         return new ResponseEntity<>(userService.save(currentUser), HttpStatus.OK);
     }
 
-    @PutMapping("/changePass/{id}")
-    public ResponseEntity<?> changePass(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping("/changePass/{id}/{oldPass}")
+    public ResponseEntity<?> changePass(@PathVariable Long id, @RequestBody User user, @PathVariable String oldPass) {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user1 = userOptional.get();
+        if (!passwordEncoder.matches(oldPass, user1.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("old pass not match");
+        }
         if (passwordEncoder.matches(user.getPassword(), user1.getPassword())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("duplicate password");
         }
