@@ -17,13 +17,14 @@ public class SingerInteraction {
     private Long senderId;
     private Long recieverId;
     private Long singerId;
-    private String comment;
+    private String comment = null;
     private Date createdAt;
     private String link;
-    private boolean likes;
-    private boolean isRead;
+    private boolean likes = false;
+    private boolean isRead = false;
 
     public SingerInteraction(){
         this.createdAt = new Date();
     }
+
 }
